@@ -53,7 +53,6 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
         "초량동" : ["동구 초량동 윤흥신장군 동상앞", "35.11194650", "129.0354560", "윤흥신장군 동상 앞", "도로변", "상업지역"]
     ]
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "부산 미세먼지 지도"
@@ -110,17 +109,25 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
             print("dMP10 = \(String(describing: dPM10))")
             print("dPM10Cai = \(String(describing: dPM10Cai))")
             
-            if dPM10Cai == "1" {
-                vPM10Cai = "좋음"
-            } else if dPM10Cai == "2" {
-                vPM10Cai = "보통"
-            } else if dPM10Cai == "3" {
-                vPM10Cai = "나쁨"
-            } else if dPM10Cai == "4" {
-                vPM10Cai = "아주나쁨"
-            } else {
-                vPM10Cai = "오류"
+            switch dPM10Cai {
+                case "1": vPM10Cai = "좋음"
+                case "2": vPM10Cai = "보통"
+                case "3": vPM10Cai = "나쁨"
+                case "4": vPM10Cai = "아주나쁨"
+                default : vPM10Cai = "오류"
             }
+            
+//            if dPM10Cai == "1" {
+//                vPM10Cai = "좋음"
+//            } else if dPM10Cai == "2" {
+//                vPM10Cai = "보통"
+//            } else if dPM10Cai == "3" {
+//                vPM10Cai = "나쁨"
+//            } else if dPM10Cai == "4" {
+//                vPM10Cai = "아주나쁨"
+//            } else {
+//                vPM10Cai = "오류"
+//            }
             
             let subtitleOut =  "PM10 " + vPM10Cai! + " " + dPM10! + " ug/m3 "
             
@@ -158,11 +165,11 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
                 let castBusanData = annotation as! BusanData
                 let pm10Val = castBusanData.pm10Cai
                 switch pm10Val {
-                case "4": annotationView?.pinTintColor = UIColor.red // 매우나쁨
-                case "3": annotationView?.pinTintColor = UIColor.brown // 나쁨
-                case "2": annotationView?.pinTintColor = UIColor.blue // 보통
-                case "1" : annotationView?.pinTintColor = UIColor.green // 좋음
-                default: annotationView?.pinTintColor = UIColor.black // 오류
+                    case "4": annotationView?.pinTintColor = UIColor.red // 매우나쁨
+                    case "3": annotationView?.pinTintColor = UIColor.brown // 나쁨
+                    case "2": annotationView?.pinTintColor = UIColor.blue // 보통
+                    case "1" : annotationView?.pinTintColor = UIColor.green // 좋음
+                    default: annotationView?.pinTintColor = UIColor.black // 오류
                 }
                 
             } else {
