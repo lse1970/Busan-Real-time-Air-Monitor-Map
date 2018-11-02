@@ -12,6 +12,8 @@
 		057177FE21881836006975C3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 057177FC21881836006975C3 /* Main.storyboard */; };
 		0571780021881837006975C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 057177FF21881837006975C3 /* Assets.xcassets */; };
 		0571780321881837006975C3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0571780121881837006975C3 /* LaunchScreen.storyboard */; };
+		0571780C2188195E006975C3 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0571780B2188195E006975C3 /* MapKit.framework */; };
+		0571780E218821B1006975C3 /* BusanData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0571780D218821B1006975C3 /* BusanData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		057177FF21881837006975C3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0571780221881837006975C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0571780421881837006975C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0571780B2188195E006975C3 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		0571780D218821B1006975C3 /* BusanData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusanData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0571780C2188195E006975C3 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +45,7 @@
 			children = (
 				057177F721881836006975C3 /* BusanMap02 */,
 				057177F621881836006975C3 /* Products */,
+				0571780A2188195E006975C3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,8 +66,17 @@
 				057177FF21881837006975C3 /* Assets.xcassets */,
 				0571780121881837006975C3 /* LaunchScreen.storyboard */,
 				0571780421881837006975C3 /* Info.plist */,
+				0571780D218821B1006975C3 /* BusanData.swift */,
 			);
 			path = BusanMap02;
+			sourceTree = "<group>";
+		};
+		0571780A2188195E006975C3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0571780B2188195E006975C3 /* MapKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -136,6 +151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				057177FB21881836006975C3 /* ViewController.swift in Sources */,
+				0571780E218821B1006975C3 /* BusanData.swift in Sources */,
 				057177F921881836006975C3 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
