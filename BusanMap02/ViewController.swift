@@ -28,6 +28,7 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
     var dLat: Double?
     var dLong: Double?
     var vPM10Cai: String?
+    var mPM10Cai: String?
     
     let addrs:[String:[String]] = [
         "태종대" : ["영도구 전망로 24", "35.0597260", "129.0798400", "태종대유원지관리사무소", "도시대기", "녹지지역"],
@@ -117,17 +118,19 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
                 default : vPM10Cai = "오류"
             }
             
-            let subtitleOut =  "PM10 " + vPM10Cai! + " " + dPM10! + " ug/m3 "
+            //let subtitleOut =  "PM10 " + vPM10Cai! + " " + dPM10! + " ug/m3 "
             
-            annotation = BusanData(coordinate: CLLocationCoordinate2D(latitude: dLat!, longitude: dLong!), title: dSite!, subtitle: subtitleOut, pm10: dPM10!, pm10Cai: dPM10Cai!)
+            annotation = BusanData(coordinate: CLLocationCoordinate2D(latitude: dLat!, longitude: dLong!), title: dSite!, subtitle: address!, pm10: dPM10!, pm10Cai: dPM10Cai!)
             
             annotations.append(annotation!)
         }
+        
+        print("annotations = \(annotations)")
         // 지도의 중심점, 반경 등(zoomToRegion)이 없이도 모든 pin을 포함하여 지도가 보여질 수 있도록 함
-        myMapView.showAnnotations(annotations, animated: true)
+        //myMapView.showAnnotations(annotations, animated: true)
         
         // 지도의 중심점, 반경 등(zoomToRegion)이 반드시 필요함
-        //myMapView.addAnnotations(annotations)
+        myMapView.addAnnotations(annotations)
     }
     
     func zoomToRegion() {
@@ -136,6 +139,7 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
         let region = MKCoordinateRegion(center: location, span: span)
         myMapView.setRegion(region, animated: true)
     }
+    
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let identifier = "MyPin"
@@ -150,6 +154,7 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
             if annotationView == nil {
                 annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
                 annotationView?.canShowCallout = true
+                annotationView?.animatesDrop = true
                 
                 // 미세먼지 농도에 따라 pin의 색깔을 바꿈
                 let castBusanData = annotation as! BusanData
@@ -172,6 +177,29 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
             return annotationView
         }
         return nil
+    }
+    
+    // rightCalloutAccessoryView를 눌렀을때 호출되는 delegate method
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        let viewAnno = view.annotation as! BusanData // 데이터 클래스로 형변환(Down Cast)
+        let vPM10 = viewAnno.pm10
+        let vStation = viewAnno.title
+        let vPM10Cai = viewAnno.pm10Cai
+        
+        switch vPM10Cai {
+            case "1": mPM10Cai = "좋음"
+            case "2": mPM10Cai = "보통"
+            case "3": mPM10Cai = "나쁨"
+            case "4": mPM10Cai = "아주나쁨"
+            default : mPM10Cai = "오류"
+        }
+        
+        let ac = UIAlertController(title: vStation! + " 측정소", message: nil, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "PM10 : " + vPM10!, style: .default, handler: nil))
+        ac.addAction((UIAlertAction(title: mPM10Cai, style: .default, handler: nil)))
+        ac.addAction(UIAlertAction(title: "닫기", style: .cancel, handler: nil))
+        self.present(ac, animated: true, completion: nil)
+        
     }
     
     // XML Parsing Delegate 메소드
