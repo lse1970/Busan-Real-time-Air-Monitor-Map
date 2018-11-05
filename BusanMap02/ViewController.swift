@@ -117,27 +117,17 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
                 default : vPM10Cai = "오류"
             }
             
-//            if dPM10Cai == "1" {
-//                vPM10Cai = "좋음"
-//            } else if dPM10Cai == "2" {
-//                vPM10Cai = "보통"
-//            } else if dPM10Cai == "3" {
-//                vPM10Cai = "나쁨"
-//            } else if dPM10Cai == "4" {
-//                vPM10Cai = "아주나쁨"
-//            } else {
-//                vPM10Cai = "오류"
-//            }
-            
             let subtitleOut =  "PM10 " + vPM10Cai! + " " + dPM10! + " ug/m3 "
             
             annotation = BusanData(coordinate: CLLocationCoordinate2D(latitude: dLat!, longitude: dLong!), title: dSite!, subtitle: subtitleOut, pm10: dPM10!, pm10Cai: dPM10Cai!)
             
             annotations.append(annotation!)
-            myMapView.showAnnotations(annotations, animated: true)
-//            myMapView.addAnnotations(annotations)
-  
         }
+        // 지도의 중심점, 반경 등(zoomToRegion)이 없이도 모든 pin을 포함하여 지도가 보여질 수 있도록 함
+        myMapView.showAnnotations(annotations, animated: true)
+        
+        // 지도의 중심점, 반경 등(zoomToRegion)이 반드시 필요함
+        //myMapView.addAnnotations(annotations)
     }
     
     func zoomToRegion() {
