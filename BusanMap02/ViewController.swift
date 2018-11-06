@@ -30,6 +30,10 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
     var vPM10Cai: String?
     var mPM10Cai: String?
     
+    // 1시간 마다 호출위해 타이머 객체 생성
+    var timer = Timer()
+    var currentTime: String?
+    
     let addrs:[String:[String]] = [
         "태종대" : ["영도구 전망로 24", "35.0597260", "129.0798400", "태종대유원지관리사무소", "도시대기", "녹지지역"],
         "전포동" : ["부산진구 전포대로 175번길 22", "35.1530480", "129.0635640","경남공고 옥상", "도시대기",  "상업지역"],
@@ -58,28 +62,32 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
         super.viewDidLoad()
         self.title = "부산 미세먼지 지도"
         // Do any additional setup after loading the view, typically from a nib.
-        // XML Parsing
-        let key = "aT2qqrDmCzPVVXR6EFs6I50LZTIvvDrlvDKekAv9ltv9dbO%2F8i8JBz2wsrkpr9yrPEODkcXYzAqAEX1m%2Fl4nHQ%3D%3D"
-        let strURL = "http://opendata.busan.go.kr/openapi/service/AirQualityInfoService/getAirQualityInfoClassifiedByStation?ServiceKey=\(key)&numOfRows=21"
         
-        if let url = URL(string: strURL) {
-            if let parser = XMLParser(contentsOf: url) {
-                parser.delegate = self
-                
-                if (parser.parse()) {
-                    print("parsing success")
-                    
-                    for item in items {
-                        print("item pm10 = \(item["pm10"]!)")
-                    }
-                    
-                } else {
-                    print("parsing fail")
-                }
-            } else {
-                print("url error")
-            }
-        }
+        myParse()
+        timer = Timer.scheduledTimer(timeInterval: 60*60, target: self, selector: #selector(myParse), userInfo: nil, repeats: true)
+        
+//        // XML Parsing
+//        let key = "aT2qqrDmCzPVVXR6EFs6I50LZTIvvDrlvDKekAv9ltv9dbO%2F8i8JBz2wsrkpr9yrPEODkcXYzAqAEX1m%2Fl4nHQ%3D%3D"
+//        let strURL = "http://opendata.busan.go.kr/openapi/service/AirQualityInfoService/getAirQualityInfoClassifiedByStation?ServiceKey=\(key)&numOfRows=21"
+//
+//        if let url = URL(string: strURL) {
+//            if let parser = XMLParser(contentsOf: url) {
+//                parser.delegate = self
+//
+//                if (parser.parse()) {
+//                    print("parsing success")
+//
+//                    for item in items {
+//                        print("item pm10 = \(item["pm10"]!)")
+//                    }
+//
+//                } else {
+//                    print("parsing fail")
+//                }
+//            } else {
+//                print("url error")
+//            }
+//        }
         
         // Map
         myMapView.delegate = self
@@ -120,7 +128,7 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
             
             //let subtitleOut =  "PM10 " + vPM10Cai! + " " + dPM10! + " ug/m3 "
             
-            annotation = BusanData(coordinate: CLLocationCoordinate2D(latitude: dLat!, longitude: dLong!), title: dSite!, subtitle: address!, pm10: dPM10!, pm10Cai: dPM10Cai!)
+            annotation = BusanData(coordinate: CLLocationCoordinate2D(latitude: dLat!, longitude: dLong!), title: dSite!, subtitle: "부산시 " + address!, pm10: dPM10!, pm10Cai: dPM10Cai!)
             
             annotations.append(annotation!)
         }
@@ -133,6 +141,37 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
         myMapView.addAnnotations(annotations)
     }
     
+    @objc func myParse() {
+        // XML Parsing
+        let key = "aT2qqrDmCzPVVXR6EFs6I50LZTIvvDrlvDKekAv9ltv9dbO%2F8i8JBz2wsrkpr9yrPEODkcXYzAqAEX1m%2Fl4nHQ%3D%3D"
+        let strURL = "http://opendata.busan.go.kr/openapi/service/AirQualityInfoService/getAirQualityInfoClassifiedByStation?ServiceKey=\(key)&numOfRows=21"
+        
+        if let url = URL(string: strURL) {
+            if let parser = XMLParser(contentsOf: url) {
+                parser.delegate = self
+                
+                if (parser.parse()) {
+                    print("parsing success")
+                    
+                    // 파싱이 끝난시간 시간 측정
+                    let date: Date = Date()
+                    let dayTimePeriodFormat = DateFormatter()
+                    dayTimePeriodFormat.dateFormat = "YYYY/MM/dd HH시"
+                    currentTime = dayTimePeriodFormat.string(from: date)
+                    for item in items {
+                        print("item pm10 = \(item["pm10"]!)")
+                    }
+                    
+                } else {
+                    print("parsing fail")
+                }
+            } else {
+                print("url error")
+            }
+        }
+        
+    }
+    
     func zoomToRegion() {
         let location = CLLocationCoordinate2D(latitude: 35.180100, longitude: 129.081017)
         let span = MKCoordinateSpan(latitudeDelta: 0.27, longitudeDelta: 0.27)
@@ -140,7 +179,7 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
         myMapView.setRegion(region, animated: true)
     }
     
-    
+    /*
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let identifier = "MyPin"
         
@@ -178,6 +217,55 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
         }
         return nil
     }
+ */
+    
+    func mapView(_ mapView: MKMapView,
+                 viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+
+        // Leave default annotation for user location
+        if annotation is MKUserLocation {
+            return nil
+        }
+
+        let reuseID = "MyPin"
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID) as? MKPinAnnotationView
+        if annotationView == nil {
+            let pin = MKPinAnnotationView(annotation: annotation,
+                                       reuseIdentifier: reuseID)
+            //pin.image = UIImage(named: "cabifyPin")
+            pin.isEnabled = true
+            pin.canShowCallout = true
+            
+            let castBusanData = annotation as! BusanData
+            let pm10Val = castBusanData.pm10Cai
+            
+
+            let label = UILabel(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
+            label.textColor = UIColor.red
+//            label.text = annotation.id // set text here
+            
+            //let castBusanData = annotation as! BusanData
+            
+            label.text = castBusanData.pm10
+            pin.addSubview(label)
+            annotationView = pin
+            
+            switch pm10Val {
+            case "4": annotationView?.pinTintColor = UIColor.red // 매우나쁨
+            case "3": annotationView?.pinTintColor = UIColor.brown // 나쁨
+            case "2": annotationView?.pinTintColor = UIColor.blue // 보통
+            case "1" : annotationView?.pinTintColor = UIColor.green // 좋음
+            default: annotationView?.pinTintColor = UIColor.black // 오류
+            }
+            
+        } else {
+            annotationView?.annotation = annotation
+        }
+
+        let btn = UIButton(type: .detailDisclosure)
+        annotationView?.rightCalloutAccessoryView = btn
+        return annotationView
+    }
     
     // rightCalloutAccessoryView를 눌렀을때 호출되는 delegate method
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
@@ -194,9 +282,13 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
             default : mPM10Cai = "오류"
         }
         
-        let ac = UIAlertController(title: vStation! + " 측정소", message: nil, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "PM10 : " + vPM10!, style: .default, handler: nil))
-        ac.addAction((UIAlertAction(title: mPM10Cai, style: .default, handler: nil)))
+        let mTitle = "미세먼지(PM 10)  \(mPM10Cai!) (\(vPM10!) ug/m3)"
+        
+        let ac = UIAlertController(title: vStation! + " 대기질 측정소", message: nil, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "측정시간  " + currentTime! , style: .default, handler: nil))
+        
+        ac.addAction(UIAlertAction(title: mTitle, style: .default, handler: nil))
+        
         ac.addAction(UIAlertAction(title: "닫기", style: .cancel, handler: nil))
         self.present(ac, animated: true, completion: nil)
         
