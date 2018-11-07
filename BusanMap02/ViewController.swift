@@ -232,7 +232,7 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
         if annotationView == nil {
             let pin = MKPinAnnotationView(annotation: annotation,
                                        reuseIdentifier: reuseID)
-            //pin.image = UIImage(named: "cabifyPin")
+//            pin.image = UIImage(named: "marker-30")
             pin.isEnabled = true
             pin.canShowCallout = true
             
@@ -240,8 +240,8 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
             let pm10Val = castBusanData.pm10Cai
             
 
-            let label = UILabel(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
-            label.textColor = UIColor.red
+            let label = UILabel(frame: CGRect(x: -2, y: 12, width: 30, height: 30))
+            label.textColor = UIColor.orange
 //            label.text = annotation.id // set text here
             
             //let castBusanData = annotation as! BusanData
@@ -251,11 +251,11 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
             annotationView = pin
             
             switch pm10Val {
-            case "4": annotationView?.pinTintColor = UIColor.red // 매우나쁨
-            case "3": annotationView?.pinTintColor = UIColor.brown // 나쁨
-            case "2": annotationView?.pinTintColor = UIColor.blue // 보통
-            case "1" : annotationView?.pinTintColor = UIColor.green // 좋음
-            default: annotationView?.pinTintColor = UIColor.black // 오류
+                case "4": annotationView?.pinTintColor = UIColor.red // 매우나쁨
+                case "3": annotationView?.pinTintColor = UIColor.orange // 나쁨
+                case "2": annotationView?.pinTintColor = UIColor.blue // 보통
+                case "1" : annotationView?.pinTintColor = UIColor.green // 좋음
+                default: annotationView?.pinTintColor = UIColor.black // 오류
             }
             
         } else {
@@ -288,6 +288,8 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
         ac.addAction(UIAlertAction(title: "측정시간  " + currentTime! , style: .default, handler: nil))
         
         ac.addAction(UIAlertAction(title: mTitle, style: .default, handler: nil))
+        
+        ac.addAction(UIAlertAction(title: "초미세먼지(PM10) 나쁨(xx ug/m3)", style: .default, handler: nil))
         
         ac.addAction(UIAlertAction(title: "닫기", style: .cancel, handler: nil))
         self.present(ac, animated: true, completion: nil)
