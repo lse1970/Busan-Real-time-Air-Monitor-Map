@@ -44,7 +44,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" id="FYJ-za-K7K"/>
+                    <navigationItem key="navigationItem" id="FYJ-za-K7K">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="information (1).png" id="sGD-r5-zxq">
+                            <connections>
+                                <segue destination="aXJ-Vs-bL0" kind="show" id="zqs-Hx-Xq7"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="myMapView" destination="IUm-Ru-uBv" id="Vcf-DM-OcS"/>
                     </connections>
@@ -52,6 +58,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1076" y="133.5832083958021"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="DrY-b6-n6f">
+            <objects>
+                <viewController id="aXJ-Vs-bL0" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="y11-UX-2Fa">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="tIn-cA-8SN"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mo0-YE-zwX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1865" y="125"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="B6M-28-6BE">
@@ -72,4 +93,7 @@
             <point key="canvasLocation" x="197.59999999999999" y="792.95352323838085"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="information (1).png" width="24" height="24"/>
+    </resources>
 </document>

@@ -14,6 +14,7 @@
 		0571780321881837006975C3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0571780121881837006975C3 /* LaunchScreen.storyboard */; };
 		0571780C2188195E006975C3 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0571780B2188195E006975C3 /* MapKit.framework */; };
 		0571780E218821B1006975C3 /* BusanData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0571780D218821B1006975C3 /* BusanData.swift */; };
+		24DA5EF72194458B007911AD /* information (1).png in Resources */ = {isa = PBXBuildFile; fileRef = 24DA5EF62194458B007911AD /* information (1).png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		0571780421881837006975C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0571780B2188195E006975C3 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		0571780D218821B1006975C3 /* BusanData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusanData.swift; sourceTree = "<group>"; };
+		24DA5EF62194458B007911AD /* information (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "information (1).png"; path = "../../../Downloads/information (1).png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 		057177F721881836006975C3 /* BusanMap02 */ = {
 			isa = PBXGroup;
 			children = (
+				24DA5EF62194458B007911AD /* information (1).png */,
 				057177F821881836006975C3 /* AppDelegate.swift */,
 				057177FA21881836006975C3 /* ViewController.swift */,
 				057177FC21881836006975C3 /* Main.storyboard */,
@@ -139,6 +142,7 @@
 			files = (
 				0571780321881837006975C3 /* LaunchScreen.storyboard in Resources */,
 				0571780021881837006975C3 /* Assets.xcassets in Resources */,
+				24DA5EF72194458B007911AD /* information (1).png in Resources */,
 				057177FE21881836006975C3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
