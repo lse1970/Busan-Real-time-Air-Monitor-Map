@@ -8,11 +8,14 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
-class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
+class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate, CLLocationManagerDelegate  {
 
     @IBOutlet weak var myMapView: MKMapView!
     
+    
+    let locationManager = CLLocationManager()
     var annotation: BusanData?
     var annotations: Array = [BusanData]()
     
@@ -60,6 +63,13 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.locationManager.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.startUpdatingLocation()
+        self.myMapView.showsUserLocation = true
+        
         self.title = "부산 미세먼지 지도"
         // Do any additional setup after loading the view, typically from a nib.
         
@@ -140,6 +150,10 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
         // 지도의 중심점, 반경 등(zoomToRegion)이 반드시 필요함
         myMapView.addAnnotations(annotations)
     }
+    
+    // 현재 위치
+    
+   
     
     @objc func myParse() {
         // XML Parsing
@@ -267,6 +281,13 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
         return annotationView
     }
     
+    private let regionRadius: CLLocationDistance = 1000 // 1km ~ 1.6km(1mile)
+    
+    func zoomMapOn(location: CLLocation) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
+        myMapView.setRegion(coordinateRegion, animated: true)
+    }
+    
     // rightCalloutAccessoryView를 눌렀을때 호출되는 delegate method
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         let viewAnno = view.annotation as! BusanData // 데이터 클래스로 형변환(Down Cast)
@@ -323,5 +344,15 @@ class ViewController: UIViewController, MKMapViewDelegate, XMLParserDelegate {
             items.append(item)
         }
     }
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations.last
+        let center = CLLocationCoordinate2DMake(location!.coordinate.latitude, location!.coordinate.latitude)
+        let region = MKCoordinateRegion(center: center, span:MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
+        self.myMapView.setRegion(region, animated: true)
+        self.locationManager.startUpdatingLocation()
+    }
 }
+
+
+
 
